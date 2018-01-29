@@ -1,12 +1,10 @@
 # python
 python学习笔记
-
 此笔记为nlp入门所记，来自Natural Language Processing with Python
 
-
-day one
-nlp   python自然语言处理方面的应用
-(1) 关于NLTK入门
+    day one
+    nlp   python自然语言处理方面的应用
+    (1) 关于NLTK入门
     1. 安装NLTk   pip install nltk  
     2. 安装NLTK自带书本  import nltk 
                         nltk.download()  ## 选择book  里面会有9个英文text文本
