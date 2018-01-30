@@ -1,0 +1,48 @@
+day2   
+#1.2 近观python ：将文本当做词链表
+
+1.链表(列表)
+    sent1 = ['Call','me','Ishmael','.']   # 可以看做是python中的列表使用   可以用函数约束  例如len(sent1)
+    
+    列表中的函数将在文本处理方面广泛运用
+    append 追加函数 类似于文件中的 'a+'   sent1.append('Some')  ——  ['Call','me','Ishmael','.','Some']
+
+2.索引列表(搜索)
+    
+    索引  #  我们可以根据词在链表中出现的次序找出一个python链表元素  表示这个位置的数字叫做这个元素索引
+    sent1[0]  ——  Call  # 注意索引从零开始 第一个元素写作sent1[0]       sent1.index('me')  ——  2    # index 函数 可以找出一个词在列表中第一次出现的索引(位置)
+    
+    python也允许我们获取子链表 从大文本中任意抽取语言片段  俗称切片 
+    例如: 
+    text5[16715:16735]  # 表示从第16716到16735所有词  用法和列表切片类似  [:] [5:] [:6]
+     
+    sent = ['word1','word2','word3','word4','word5','word6','word7','word8','word9','word10']
+    sent[5:8] —— ['word6','word7','word8']
+    sent[:3]  —— ['word1','word2','word3']
+    我们也可以用新的内容替换原链表中的元素
+    sent[0] = 'First'
+    sent[9] = 'Last'
+    sent[1:9] = ['Second','Third']
+    sent —— ['First','Second','Third','Last']
+    # 等号左右的类型需相同(元素——元素   列表——列表)
+    
+    
+3.变量 
+    变量名 = 表达式  例如 sent1 = ['Call','me','Ishmael','.'] 中 定义一个变量sent1   这个过程我们也叫做赋值
+    选择有意义的变量名 能够提醒你代码含义
+    ## 不能是Python中特有的函数名  def if ...   并且是以字母开头后面加数字 ABC123 my_var(_不能是-)
+    
+    
+4.字符串
+    我们用来访问列表元素的一些方法也可以用在单独的词或者字符串上。 
+    例如
+    name = 'Monty'
+    name[0] —— 'M'
+    name[:4] —— 'Mont'
+    name*2 —— 'MontyMonty'
+    name + '!'  —— 'Monty!'
+    我们也可以把词用链表连接起来组成单个字符串，或者把字符串分割为一个链表
+    例如
+    ''.join(['Monty','Python']) —— 'MontyPython'
+    'Monty Python'.split()
+    
