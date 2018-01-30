@@ -19,6 +19,7 @@ day2
     sent = ['word1','word2','word3','word4','word5','word6','word7','word8','word9','word10']
     sent[5:8] —— ['word6','word7','word8']
     sent[:3]  —— ['word1','word2','word3']
+    sent[-2:] —— ['word9', 'word10']
     我们也可以用新的内容替换原链表中的元素
     sent[0] = 'First'
     sent[9] = 'Last'
@@ -45,4 +46,82 @@ day2
     例如
     ''.join(['Monty','Python']) —— 'MontyPython'
     'Monty Python'.split()
+    
+#1.3计算语言: 简单的统计
+    
+1.频率分布
+    统计文本中词频(出现次数最多的几个词)
+    我们经常要在语言处理中使用频率分布  NLTK中内置了词频函数
+    例如
+    fdist1 = FreqDist(text1)
+    fdist1     # <FreqDist with 260819 outcomes>
+    vocabulary1 = fdist1.keys()
+    vocabulary1[:50]  # 输出一个链表
+    fdist1['whale']   # 906   词频
+    fdist1.plot(50,cumulative=Ture)  # 可以产生一个这些词汇的累积频率图 会发现这50个词几乎占了书的一半
+    
+    那对于低频词我们应该怎么处理呢
+    我们可以使用 hapaxe函数         输入 fdist1.hapaxes()  查看
+    
+2.细粒度的选择词
+    # 选出文本中一些具有特殊特征(信息量)的词  
+    例如
+    选出text1中长度大于15个字符的词          #经分析可得   词 w 属于 V 然后满足词长大于15 就选出 
+    给出python代码如下
+    Vocab = set(text1)
+    long_words = [word for word in Vocab if len(word)>15]
+    sorted(long_words)
+    
+    类似我们可以继续添加特征，使选出的词更加的细致(增加细粒度)
+    比如选出文本中所有长度超过7个字符，出现次数超过7次的词
+    fdist5 = FreqDist(text5)
+    sorted([word for word in set(text5) if len(word)>7 and fdist5[word]>7])
+    使用两个条件用 and 连接 
+    判断逻辑条件选择 and or ...
+    
+3.词语搭配和双连词(bigrams)
+    词语的搭配 例如 red wine 是一个搭配而 the wine 搭配不是
+    一个词搭配的关键是其中的词不能被类似的词替换
+    所以我们需要获取文本中的搭配  first 我们提取文本词汇中的词对也就是双连词
+    bigrams函数
+    bigrams(['more','is','said','than''done'])    ——  [('more','is'),('is','said'),('said','than'),('than','done')]
+    # 这个函数组合的双连词 很多都是不合适的，我们希望找到比我们基于单个词的频率预期得到的更频繁出现的双连词
+    collocations()函数
+                 text4.collocations()
+    文本中出现的搭配很能体现文本的风格
+    
+    
+4.计数其他东西
+    ！统计文本中每个词词长
+        [len(word) for word in text1]
+        fdist = FreqDist([len(word) for word in text1])
+        fdist    # <FreqDist with 260819 outcomes>
+        fdist.keys()
+        
+        fdist.itme()  # 可以统计 文本中有多少长度为4的词？长度为5的词是否比长度为4的词多？等等
+        
+##  NLTK频率分布类中定义的函数
+
+fdist = FreqDist(samples)          # 创建包含给定样本的频率分布
+fdist.inc(samples)                 # 增加样本
+fdist['monstrous']                 # 计数给定样本出现的次数
+fdist.freq('monstrous')            # 给定样本频率
+fdist.N()                          # 样本总量
+fdist.keys()                       # 以频率递减顺序排序的样本链表
+for sample in fdist:               # 以频率递减的顺序遍历样本
+fdist.max                          # 数值最大的样本
+fdist.tabulate()                   # 绘制频率分布表
+fdist.plot()                       # 绘制频率分布图
+fdist.plot(cumulative=Ture)        # 绘制累积频率分布图
+fdist1 < fdist2                    # 测试样本在fdist1中出现的频率是否会小于fdist2
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
