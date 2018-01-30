@@ -115,13 +115,3 @@ fdist.plot()                       # 绘制频率分布图
 fdist.plot(cumulative=Ture)        # 绘制累积频率分布图
 fdist1 < fdist2                    # 测试样本在fdist1中出现的频率是否会小于fdist2
         
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
