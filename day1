@@ -15,4 +15,4 @@ day one
     4.计数词汇
          ！ len(text3)  44764  # 当成是一个列表来处理  会统计词+标点 
          ！ sort(set(text3))  2789  # set对text3进行处理 可以计算text中有多少不同的词   ## set 之后还是存在标点符号
-         ！ count  计算一个词在文本中出现次数 text3.count("smote") 5
+         ！ count  计算一个词在文本中出现次数 text3.count("smote")    5
