@@ -1,0 +1,94 @@
+day3
+#1.4 回归Python：决策与控制
+
+1.条件    
+  关系运算符 
+  <      小于
+  <=     小于等于
+  ==     等于(注意是两个“=”号而不是一个)
+  !=     不等于
+  >      大于 
+  >=     大于等于
+  
+day2中的一些实例中已经体现了关系运算符的一些作用——从文本句子中选出不同的词
+[word for word in vocab if len(word)<4]     选出长度小于4的字符串  其中 < 根据逻辑关系可替换为上述关系运算符中的一种
+
+# len(word)<4  是判断的条件(condition)  
+# 一些词比较运算符
+  s.startswith(t)        测试s是否以t开头
+  s.endswith(t)          测试s是否以t结尾
+  t in s                 测试s是否包含t
+  s.islower()            测试s中所有的字符是否都是小写字母
+  s.isupper()            测试s中所有的字符是否都是大写字母
+  s.isalpha()            测试s中所有的字符是否都是字母
+  s.isalnum()            测试s中所有的字符是否都是字母或数字
+  s.isdigit()            测试s中所有的字符是否都是数字
+  s.istitle()            测试s是否首字母大(s中所有的词首字母大写)
+
+例如：  
+  sorted[word for word in set(text1) if word.endswith('ableness')]
+  ——['comfortableness','honourableness'....]
+  sorted[word for word in set(sent7) if word.item()]
+  ——['29','61']
+  
+# 我们可以用 and 和 or 合并两个条件来创造一个新的条件
+
+
+2.对每个元素进行操作
+例如：
+  [len(word) for word in text1] —— [1,4,4,2,6,8,4,1,9,1,1,8,2,1,4,11,....]
+  [word.upper() for word in text1] —— ['[','MOBY','DICK','BY','HERMAN',....]
+
+这些表达式的形式为[f(w) for ...]或者[w.f() for ...]  其中f是一个函数，用来计算词的长短或者把字母转换为大写。
+
+例如：
+  len(text1) —— 260819
+  len(set(text1)) —— 19317
+  len(set([word.lower() for word in text1])) —— 17231
+#由于我们不必计算像This和this这样仅仅大小写不同的词，就已经从词汇表中抹去了2000个！还可以更进一步，通过过滤所有非字母元素，从词汇表中消除数字和标点符号。
+
+  len(set([word.lower() for word in text1 if word.isalpha()])) —— 16948
+这个例子稍微有点复杂：将所有纯字母组成的词小写。
+
+
+3.嵌套代码块
+  # 注意缩进，在print语句前输入四个空格
+  word  = 'cat'
+  if len(word) < 5:
+    print('the word length is less than 5')
+  一个if语句叫做控制结构，另外还有for循环，在接下来的条件循环中会详细介绍
+  
+  
+4.条件循环
+  我们可以将if语句和for语句结合，详细请看下面实例
+  例如：
+      sent1 = ['Call','me','Ishmael','.']
+      for xyzzy in sent1:
+        if xyzzy.endswith('l'):
+          print(xyzzy)
+          
+      ——Call
+      ——Ishmael
+      
+if 和 for语句所在行末尾————缩进开始之前——————有一个冒号。所有Python控制结构都是以冒号结尾。冒号结尾表示当前语句与后面的缩进有关联。
+如果if语句判断的条件不止一种，可以与elif，else连用
+
+      tricky = sorted([word for word in set(text2) if 'cie' in word or 'cei' in word])
+      for word in tricky:
+        print(word)
+条件语句的应用广泛，需要不断的练习，熟练使用
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
