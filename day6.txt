@@ -1,0 +1,17 @@
+day6
+# 2.2条件频率分布
+   ### 条件频率分布是频率分布的集合，每个频率分布有一个不同的“条件”。这个条件通常是文本的类别。
+   
+1.条件和事件
+  频率分布计算观察到的事件，如文本中出现的词汇。条件频率分布需要给每个时间关联一个条件，所以不是处理一个词序列，我们必须处理的是一个配对序列。
+  >>> text = ['The','me'....]
+  >>> pairs = [('new','The'),('new','me'),...]
+  每对的形式是：（条件，事件）
+  
+2.按文体计数词汇
+  >>> from nltk.corpus import brown
+  >>> cfd = nltk.ConditionalFreqDist(
+               (genre,word)
+               for genre in brown.catagories()
+               for word in brown.words(categories=genre))
+   
