@@ -85,3 +85,65 @@ day5
     >>> chatroom[123]
     ['i', 'do', "n't", 'want', 'hot', 'pics', 'of', 'a', 'female', ',', 'I', 'can', 'look', 'in', 'a', 'mirror', '.']
 
+3.布朗语料库
+    >>> from nltk.corpus import brown
+    >>> brown.categories()
+    ['adventure', 'belles_lettres', 'editorial', 'fiction', 'government', 'hobbies', 'humor', 'learned', 'lore','mystery','news','religion', 'reviews', 'romance', 'science_fiction']
+    >>> brown.words(categories= 'news')
+    ['The', 'Fulton', 'County', 'Grand', 'Jury', 'said', ...]
+    >>> brown.words(fileids=['cg22'])
+    ['Does', 'our', 'society', 'have', 'a', 'runaway', ',', ...]
+    >>> brown.sents(categories=['news','editorial','reviews'])
+    [['The', 'Fulton', 'County', 'Grand', 'Jury', 'said', 'Friday', 'an', 'investigation', 'of', "Atlanta's", 'recent', 'primary', 'election', 'produced', '``', 'no', 'evidence', "''", 'that', 'any', 'irregularities', 'took', 'place', '.'], ['The', 'jury', 'further', 'said', 'in', 'term-end', 'presentments', 'that', 'the', 'City', 'Executive', 'Committee', ',', 'which', 'had', 'over-all', 'charge', 'of', 'the', 'election', ',', '``', 'deserves', 'the', 'praise', 'and', 'thanks', 'of', 'the', 'City', 'of', 'Atlanta', "''", 'for', 'the', 'manner', 'in', 'which', 'the', 'election', 'was', 'conducted', '.'], ...]
+    布朗语料库是一个研究文体之间的系统性差异————一种叫做文体学的语言学研究————很方便的资源。
+    让我们来比较不同的文体中的情态动词的用法。
+    第一步：产生特定文本的计数，记住做下面的实验之前要import nltk
+    >>> from nltk.corpus import brown
+    >>> news_text = brown.words(categories='news')
+    >>> fdist = nltk.FreqDist([w.lower() for w in news_text])
+    >>> modals = ['can','could','may','might','must','will']
+    >>> for m in modals:
+	    print(m + ':',fdist[m])
+	    
+	can: 94  could: 87  may: 93  might: 38  must: 53  will: 389
+
+
+    下面，我们来统计每一个文体中的情态动词
+    >>> cfd = nltk.ConditionalFreqDist(
+    		(genre,word)
+		for genre in brown.catagories()
+		for word in brown.words(catagories=genre))
+    >>> genres = ['news','religion','hobbies','science_fiction','romance','humor']
+    >>> modals = ['can','could','may','might','must','will']
+    >>> cfd.tabulate(conditions=genres, samples=modals)
+                  can could   may might  must  will 
+           news    93    86    66    38    50   389 
+       religion    82    59    78    12    54    71 
+        hobbies   268    58   131    22    83   264 
+science_fiction    16    49     4    12     8    16 
+        romance    74   193    11    51    45    43 
+          humor    16    30     8     8     9    13 
+
+
+4.路透社语料库
+    包含了10788个新闻文档，共计130万字。这些文档分为90个主题，按照“训练”和“测试”分为两组。
+    >>> from nltk.corpus import reuters
+    >>> reuters.fileids()
+    ['training/7406', 'training/7407', 'training/7408', 'training/741', 'training/7410', 'training/7413', 'training/7419', 'training/742'...]
+    >>> reuters.categories()
+    ['acq', 'alum', 'barley', 'bop', 'carcass', 'castor-oil', 'cocoa', 'coconut', 'coconut-oil', 'coffee', 'copper', 'copra-cake', 'corn', ...]
+    
+    语料库方法既接受单个的fileid也接受fileids列表作为参数
+    >>> reuters.categories('training/9865')
+    ['barley', 'corn', 'grain', 'wheat']
+    >>> reuters.categories(['training/9865','training/9880'])
+    ['barley', 'corn', 'grain', 'money-fx', 'wheat']
+    >>> reuters.fileids('barley')
+    ['test/15618', 'test/15649', 'test/15676', 'test/15728', 'test/15871', 'test/15875', 'test/15952', 'test/17767', 'test/17769', 'test/18024', ...]
+    >>> reuters.fileids(['barley','corn'])
+    ['test/14832', 'test/14858', 'test/15033', 'test/15043', 'test/15106', 'test/15287', 'test/15341', 'test/15618', 'test/15648', 'test/15649', 'test/15676', 'test/15686', 'test/15720', 'test/15728', 'test/15845', 'test/15856', 'test/15860',...]
+    
+    类似的我们可以以文档或类别为单位查找我们想要的词或句子
+    >>> reuters.words('training/9865')[:14]
+    >>> reuters.words(categories='barley')
+    
