@@ -147,3 +147,63 @@ science_fiction    16    49     4    12     8    16
     >>> reuters.words('training/9865')[:14]
     >>> reuters.words(categories='barley')
     
+5.就职演讲语料库
+    >>> from nltk.corpus import inaugural
+    >>> inaugural.fileids()
+    >>> [fileid[:4] for fileid in inaugural.fileids()]
+    注：每个文本的年代都出现在它的文件名中。要从文件名中提取出年代，我们使用fileid[:4]提取前四个字符
+    
+    >>> cfd = nltk.ConditionalFreqDist(
+    		(target,fileid[:4])
+		for fileid in inaugural.fileids()
+		for w in inaugural.words(fileid)
+		for target in ['america','citizen']
+		if w.lower().startswith(target))
+    >>> cfd.plot()
+    注：产生的条件频率分布图，计数就职演讲语料库中所有以america或citizen开始的词。每个演讲单独计数。这样就能观察出随时间变化用法上的演讲趋势，计数没有与文档长度进行归一化处理
+    
+    
+6.其他语言的语料库
+    nltk中包含多国语言语料库。某种情况下你在使用这些语料库之前需要学习如何在python中处理字符编码。（后面会详细讲述）
+    >>> nltk.corpus.cess_esp.words()
+    >>> nltk.corpus.floresta.words()
+    >>> nltk.corpus.indian.words('hindi.pos')
+    >>> nltk.corpus.udhr.fileids()
+    >>> nltk.corpus.udhr.words('Javanese-Latin1')[11:]
+    这些语料库的最后，udhr，是超过300中语言的世界人权宣言。这个语料库的fileids包括有关文件所使用的字符编码，如utf-8或者是Latin1。
+    下面我们用条件频率分布来研究"世界人权宣言"（udhr）语料库中不同语言版本中字长的差异。
+    
+    >>> from nltk.corpus import udhr
+    >>> languages = ['Chickasaw','English','German_Deutsch','Greenlandic_Inuktikut','Hungarian_Magyar','Ibibio_Efik']
+    >>> cfd = nltk.ConditionalFreqDist(
+    		(lang,len(word))
+		for lang in languages
+		for word in udhr.words(lang + '-Latin1'))
+    >>> cfd.plot(cumulative = True)
+    
+7.文本语料库的结构
+    常见结构：
+        最简单的一种语料库是一些孤立的没有什么特别的组织的文本集合
+        一些语料库如文体（布朗语料库）等分类组织结构
+	一些分类会重叠，如主题类别（路透社语料库）
+	另外一些语料库可以表示随时间变化语言用法的改变（就职演说语料库）
+	
+NLTK中定义的基本语料库函数：使用help(nltk.corpus.reader)可以找到更多的文档
+    fileids()		                                语料库中的文件			
+    fileids([categories])                               这些分类所对应的语料库中的文件
+    categories()                                        语料库中的分类
+    categories([fileids])                               这些文件对应的语料库中的分类
+    raw()                                               语料库的原始内容
+    raw(fileids = [f1,f2,f3])                           指定文件的原始内容
+    raw(categories = [c1,c2])                           指定分类的原始内容
+    words()                                             整个语料库中的词汇
+    words(fileids = [f1,f2,f3])                         指定文件中的词汇 
+    words(categories = [c1,c2])                         制定分类中的词汇
+    sents()                                             整个分类中的句子
+    sents(fileids = [f1,f2,f3])                         指定文件中的句子
+    sents(categories = [c1,c2])                         指定分类中的句子
+    abspath(fileid)                                     指定文件在磁盘中的位置
+    encoding(fileid)                                    文件的编码（如果知道的话）
+    open(fileid)                                        打开指定语料库文件的文件流
+    root()                                              到本地安装的语料库根目录的路径
+
