@@ -8,10 +8,95 @@ day6
   >>> pairs = [('new','The'),('new','me'),...]
   每对的形式是：（条件，事件）
   
+  
 2.按文体计数词汇
+  day5中我们看到了以下代码，下面对代码进行解释
   >>> from nltk.corpus import brown
   >>> cfd = nltk.ConditionalFreqDist(
                (genre,word)
                for genre in brown.catagories()
                for word in brown.words(categories=genre))
    
+   让我们拆开来看，只看两个文体：新闻和言情。对于每个文体，我们遍历文体中的每个词以产生文体与词的配对。
+   >>> genre_word = [(genre,word)
+                    for genre in ['news','romance']
+                    for word in brown.words(categories=genre))]
+   >>> len(genre_word)
+   170576
+   下面的代码中我们可以知道：链表genre_word的前几个匹配将是('news',word),而最后几个配对将是('romance',word)的形式
+   >>> gener_word[:4]
+   >>> gener_word[-4:]
+   现在我们可以使用次配对链表创建一个ConditionalFreqDist，并将它保存在一个变量cfd中。
+   >>> cfd = nltk.ConditionalFreqDist(genre_word)
+   >>> cfd
+   <CondictionalFreqDist with 2 conditions>
+   >>> cfd.conditions()
+   ['news','romance']
+   让我们访问这两个条件，它们每一个都只是一个频率分布：
+   >>> cfd['news']
+   <FreqDist with 100554 outcomes>
+   >>> list(cfd['news'])
+   >>> cfd['romance']['could']
+   
+   
+3.绘制分布图和分布表
+   >>> import nltk
+   >>> from nltk.corpus import inaugural
+   >>> cfd = nltk.ConditionalFreqDist(
+	         (target,fileid[:4])
+	         for fileid in inaugural.fileids()
+	         for w in inaugural.words(fileid)
+	         for target in ['america','citizen']   #条件
+	         if w.lower().startswith(target))
+   其中利用每个演讲的文件名，其开头四个字符包含年代的信息。产生的配对为('america','1865')
+   
+   >>> from nltk.corpus import udhr
+   >>> cfd = nltk.ConditionalFreqDist(
+	         (lang,len(word))
+	         for lang in languages
+	         for word in udhr.words(lang + '-Latin1'))
+   这次的条件是语言的名称，计数为词长。它利用了每一种语言的文件名是语言名称后面跟上'-Latin1'（字符编码）的事实
+   
+   在plot()和tabulate()方法中，我们可以使用conditions = parameter来选择指定哪些条件显示，同样的我们可以使用samples = parameter
+   来限制要显示的样本。
+   >>> cfd .tabulate(conditions = ['English','German_Deutsch'],
+                       samples = rang(10), cumulative = Ture)
+ 
+                  0    1    2    3    4    5    6    7    8    9 
+       English    0  185  525  883  997 1166 1283 1440 1558 1638 
+German_Deutsch    0    0    0    0    0    0    0    0    0    0 
+
+
+4.使用双连词生成随机文本
+   >>> sent = ['in','the','begining','God','created','the','heaven','and','the','earth','.']
+   我们用bigrams()函数接受一个词汇列表
+   >>> list(nltk.bigrams(sent))
+   [('in', 'the'), ('the', 'begining'), ('begining', 'God'), ('God', 'created'), ('created', 'the'), ('the', 'heaven'), ('heaven', 'and'), ('and', 'the'), ('the', 'earth'), ('earth', '.')]
+   
+   例：产生随机文本：此程序获得《创世纪》文本中所有的双连词，然后构造一个条件频率分布来记录那些词汇最有可能跟在给定词的后面；例如：living后面最有可能的词是creature；generate_model()函数使用这些数据和种子词随机产生文本。
+   def generate_model(cfdist,word,num = 15)
+      for i in range(num):
+         print(word)
+         word = cfdist[word].max()
+   text = nltk.corpus.genesis.words('english-kjv.txt')
+   bigrams = nltk.bigrams(text)
+   cfd = nltk.ConditionalFreqDist(bigrams)
+   
+   >>> print(cfd['living'])
+   <FreqDist with 6 samples and 16 outcomes>
+   >>> print(list(cfd['living']))
+   ['creature', 'thing', 'soul', '.', 'substance', ',']
+   >>> generate_model(cfd,'living')
+   living  creature  that  he  said,and  the  land  of  the  land  of  the  land
+   
+   NLTK中条件频率分布：定义、访问和可视化一个计数的条件频率分布的常用方法和习惯用法
+   
+   cfdist = ConditionalFreqDist(pairs)        从配对链表中创建条件频率分布
+   cfdist.condition()                         将条件按字母排序
+   cfdist[condition]                          此条件下的频率分布
+   cfdist[condition][sample]                  此条件下给定样本的频率
+   cfdist.tabulate()                          为条件频率分布制表
+   cfdist.tabulate(samples,conditions)        指定样本和条件限制下制表
+   cfdist.plot()                              为条件频率分布绘图
+   cfdist.plot(samples,conditions)            指定样本和条件限制下绘图
+   cfdist1 < cfdist2                          测试样本在cfdist1中出现的次数是否小于在cfdist2中出现的次数
